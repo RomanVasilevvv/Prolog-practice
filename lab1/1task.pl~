@@ -30,6 +30,18 @@ woman(karina).
 woman(viktoria).
 woman(tanya).
 
+parent(alan,lubov).
+parent(alina,lubov).
+
+parent(arsen,artem).
+parent(viktoria,artem).
+
+parent(andrey,grigory).
+parent(karina,grigory).
+
+parent(vasiliy,marina).
+parent(tanya,marina).
+
 parent(nikolay,fedor).
 parent(nikolay,anatoliy).
 parent(maria,fedor).
