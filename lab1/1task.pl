@@ -63,9 +63,5 @@ mother2(X):-parent(Y,X),woman(Y),write(Y).
 son(X,Y):-man(X),man(Y), parent(Y,X).
 son(X):- man(X),parent(X,Y),man(Y),write(Y),write(" "), fail.
 
-
-
-
-
-
-
+brother(X,Y):-man(X),man(Y), parent(Z,X),parent(Z,Y).
+brother(X):-parent(Z,X),parent(Z,Y),man(Y),not(X=Y),write(Y),write(","),fail.
