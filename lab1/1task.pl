@@ -57,6 +57,9 @@ showwoman:-woman(X),write(X),write(", "),fail.
 
 children(X):-parent(X,Y),write(Y),write(","),fail.
 
+mother(X,Y):-woman(X),parent(X,Y),write("явл€етс€ мамой").
+mother2(X):-parent(Y,X),woman(Y),write(Y).
+
 
 
 
