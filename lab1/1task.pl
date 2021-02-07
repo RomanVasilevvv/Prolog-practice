@@ -30,6 +30,18 @@ woman(karina).
 woman(viktoria).
 woman(tanya).
 
+parent(alan,lubov).
+parent(alina,lubov).
+
+parent(arsen,artem).
+parent(viktoria,artem).
+
+parent(andrey,grigory).
+parent(karina,grigory).
+
+parent(vasiliy,marina).
+parent(tanya,marina).
+
 parent(nikolay,fedor).
 parent(nikolay,anatoliy).
 parent(maria,fedor).
@@ -81,3 +93,6 @@ sister(X):-parent(Z,X),parent(Z,Y),woman(Y),not(X=Y),write(Y),write(","),fail.
 
 b_s(X,Y):-parent(Z,X),parent(Z,Y).
 b_s(X):-parent(Z,X),parent(Z,Y),man(Z),not(X=Y),write(Y),write(" "),fail.
+
+grand_pa(X,Y):- man(X), parent(X,Z),parent(Z,Y).
+grand_pas(X):-parent(Z,Y), parent(Y,X),man(Z), write(Z),write(" "),fail.
