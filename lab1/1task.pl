@@ -8,6 +8,11 @@ man(artem).
 man(konstantin).
 man(mikhail).
 man(dmitriy).
+man(alan).
+man(gleb).
+man(andrey).
+man(arsen).
+man(vasiliy).
 
 woman(maria).
 woman(glasha).
@@ -19,6 +24,11 @@ woman(rosa).
 woman(marina).
 woman(sophia).
 woman(valentina).
+woman(alina).
+woman(vera).
+woman(karina).
+woman(viktoria).
+woman(tanya).
 
 parent(nikolay,fedor).
 parent(nikolay,anatoliy).
@@ -68,3 +78,6 @@ brother(X):-parent(Z,X),parent(Z,Y),man(Y),not(X=Y),write(Y),write(","),fail.
 
 sister(X,Y):-woman(X),woman(Y), parent(Z,X),parent(Z,Y).
 sister(X):-parent(Z,X),parent(Z,Y),woman(Y),not(X=Y),write(Y),write(","),fail.
+
+b_s(X,Y):-parent(Z,X),parent(Z,Y).
+b_s(X):-parent(Z,X),parent(Z,Y),man(Z),not(X=Y),write(Y),write(" "),fail.
