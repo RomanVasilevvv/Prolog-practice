@@ -104,3 +104,5 @@ grand_pa_and_son(X,Y):-(man(X),man(Y),parent(X,Z),parent(Z,Y))|( man(X),man(Y),p
 
 grand_pa_and_da(X,Y):-(man(X),woman(Y),parent(X,Z),parent(Z,Y))|( woman(X),man(Y),parent(Z,X),parent(Y,Z)).
 
+uncle(X,Y):-man(X),parent(Z,Y),parent(R,Z),parent(R,X).
+uncle_all(X):-man(Y), parent(Z,X), parent(R,Z),parent(R,Y),man(R),not(Y=Z),write(Y),write(" "),fail.
