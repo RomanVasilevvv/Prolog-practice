@@ -60,6 +60,8 @@ children(X):-parent(X,Y),write(Y),write(","),fail.
 mother(X,Y):-woman(X),parent(X,Y),write("явл€етс€ мамой").
 mother2(X):-parent(Y,X),woman(Y),write(Y).
 
+son(X,Y):-man(X),man(Y), parent(Y,X).
+son(X):- man(X),parent(X,Y),man(Y),write(Y),write(" "), fail.
 
 
 
