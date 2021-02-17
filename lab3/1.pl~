@@ -3,3 +3,8 @@ max(X,Y,U,Z):- X>Y,X>U, Z is X ,write(Z); Y>X,Y>U, Z is Y,write(Z); U>X,U>Y, Z i
 
 fact(0,1).
 fact(N,X):-N>0,N1 is N-1,fact(N1,X1), X is X1*N.
+
+fact(1,Z,Z):-!.
+fact(N,Z,X):-Z1 is Z*N, N1 is N-1, fact(N1,Z1,X).
+factorial(N,X):-fact(N,1,X).
+
