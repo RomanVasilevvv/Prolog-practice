@@ -11,3 +11,8 @@ factorial(N,X):-fact(N,1,X).
 fib(1,1).
 fib(0,0).
 fib(X,Y):-X>1,X1 is X-1, X2 is X-2, fib(X1,Y1),fib(X2,Y2),Y is Y1+Y2.
+
+
+
+summ(0,0):-!.
+summ(X,Y):-X>0, X1 is (X mod 10),X2 is (X div 10), summ(X2,Y1), Y is Y1+X1.
