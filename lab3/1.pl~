@@ -27,3 +27,11 @@ summdown(Y, X) :- summ(Y, 0, X).
 
 maxNum(X, X) :- X div 10 =:= 0, !.
 maxNum(Y, X) :- X2 is (Y mod 10), Y1 is (Y div 10), maxNum(Y1, X1), (X1 > X2 -> X is X1; X is X2).
+
+maxNum(0, 10, 0) :- !.
+maxNum(0, CurX, CurX) :- !.
+maxNum(Y, CurX, X) :- CurX1 is (Y mod 10), Y1 is (Y div 10), (CurX1 > CurX -> CurX2 is CurX1; CurX2 is CurX), maxNum(Y1, CurX2, X).
+maxNum1(Num, Min) :- maxNum(Num, 10, Min).
+
+divNum(Y, X) :- Y =:= 0,X is 0 ,!.
+divNum(Y, X) :- Ost is (Y mod 10), Y1 is (Y div 10), divNum(Y1, X1), (Ost \== 3 -> X is (X1 + Ost); X is X1).
