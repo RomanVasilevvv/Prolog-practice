@@ -35,3 +35,9 @@ maxNum1(Num, Min) :- maxNum(Num, 10, Min).
 
 divNum(Y, X) :- Y =:= 0,X is 0 ,!.
 divNum(Y, X) :- Ost is (Y mod 10), Y1 is (Y div 10), divNum(Y1, X1), (Ost == 3 -> X is (X1 + Ost); X is X1).
+
+divNum(Num, Div, Div) :- Num = 0,Div is CurDiv,!.
+divNum(Num, CurDiv, Div) :- Mod is (Num mod 10), Num1 is (Num div 10), (Mod == 3 -> CurDiv1 is (CurDiv + Mod); CurDiv1 is CurDiv), divNum(Num1, CurDiv1, Div).
+divNumN(Num, Div) :- divNum(Num, 0, Div), Div is Div.
+
+
