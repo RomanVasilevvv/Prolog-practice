@@ -12,6 +12,8 @@ fib(1,1).
 fib(0,0).
 fib(X,Y):-X>1,X1 is X-1, X2 is X-2, fib(X1,Y1),fib(X2,Y2),Y is Y1+Y2.
 
+fib(N, CurX1, CurX2, X) :- CurX3 is CurX1 + CurX2, N1 is N - 1, fib(N1, CurX2, CurX3, X).
+fibN(N, X) :- fib(N, 1, 1, X).
 
 
 summ(0,0):-!.
