@@ -12,7 +12,12 @@ fib(1,1).
 fib(0,0).
 fib(X,Y):-X>1,X1 is X-1, X2 is X-2, fib(X1,Y1),fib(X2,Y2),Y is Y1+Y2.
 
+fib(N, CurX1, CurX2, X) :- CurX3 is CurX1 + CurX2, N1 is N - 1, fib(N1, CurX2, CurX3, X).
+fibN(N, X) :- fib(N, 1, 1, X).
 
 
 summ(0,0):-!.
 summ(X,Y):-X>0, X1 is (X mod 10),X2 is (X div 10), summ(X2,Y1), Y is Y1+X1.
+
+max(0,0):-!.
+max1(X,Y):-X>0, X1 is (X mod 10),X2 is (X div 10),max1(X2,Y1), Y1 is (X mod 10), Y1>X1,Y1 is X1.
