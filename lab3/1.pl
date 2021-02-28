@@ -40,4 +40,7 @@ divNum(Num, Div, Div) :- Num = 0,Div is CurDiv,!.
 divNum(Num, CurDiv, Div) :- Mod is (Num mod 10), Num1 is (Num div 10), (Mod == 3 -> CurDiv1 is (CurDiv + Mod); CurDiv1 is CurDiv), divNum(Num1, CurDiv1, Div).
 divNumN(Num, Div) :- divNum(Num, 0, Div), Div is Div.
 
+nodNums(X,Y,NOD):- X =:= 0,NOD is Y, !; Y =:= 0,NOD is X, !.
+nodNums(X,Y,NOD):- (X > Y -> X1 is X mod Y,nodNums(Y,X1,NOD);Y1 is Y mod X, nodNums(X,Y1,NOD)).
+nodNumsN(X,Y,NOD):- nodNums(X,Y,NOD), NOD is NOD.
 
