@@ -83,26 +83,3 @@ colN(Max,MaxN,Num):-Num1 is (Num + 1),col(Num1,N),(N > Max -> Max1 is N,colN(Max
 colN1(Max,MaxN,Num):- colN(Max,MaxN,Num),write(MaxN).
 
 
-%14
-colprost(Num,Num,Count,Count):-!.
-colprost(Num,CurNum,CurCount,Count):-CurNum1 is CurNum + 1,((nodNumsN(Num,CurNum,Nod), Nod=1) ->CurCount1 is CurCount+1;CurCount1 is CurCount),colprost(Num,CurNum1,CurCount1,Count).
-%colprost(Num,Count):-colprost(Num,1,0,Count).
-
-
-colprost(Num,Num,0):-!.
-colprost(Num,CurNum,Count):-CurNum1 is CurNum + 1, ((nodNumsN(Num,CurNum,Nod), Nod=1) ->Flag is 1;Flag is 0),colprost(Num,CurNum1,Count1),Count is Count1 + Flag.
-colprost(Num,Count):-colprost(Num,1,Count).
-
-
-%15
-prostdel(_,0,_,Count, Count):-!.
-prostdel(N,CurN,Del,CurCount,Count):-Mod is CurN mod 10, CurN1 is CurN div 10,((nodNumsN(Del,Mod,X),X=1) -> CurCount1 is CurCount + 1; CurCount1 is CurCount), prostdel(N,CurN1,Del,CurCount1,Count).
-prostdel(N,Del,Count):-prostdel(N,N,Del,0,Count).
-
-
-maxdel(N,N1,Max,Max):-N1 is N+1,!.
-
-
-maxdel(N,Del,CurMax, Max):-(0 is N mod Del -> prostdel(N,Del,Count);Count is CurMax),(Count > CurMax -> CurMax1 is Count;CurMax1 is CurMax),Del1 is Del + 1,maxdel(N,Del1,CurMax1,Max).
-maxdel(N,Max):-maxdel(N,1,0,Max).
-

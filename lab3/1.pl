@@ -83,3 +83,12 @@ colN(Max,MaxN,Num):-Num1 is (Num + 1),col(Num1,N),(N > Max -> Max1 is N,colN(Max
 colN1(Max,MaxN,Num):- colN(Max,MaxN,Num),write(MaxN).
 
 
+%14
+colprost(Num,Num,Count,Count):-!.
+colprost(Num,CurNum,CurCount,Count):-CurNum1 is CurNum + 1,((nodNumsN(Num,CurNum,Nod), Nod=1) ->CurCount1 is CurCount+1;CurCount1 is CurCount),colprost(Num,CurNum1,CurCount1,Count).
+%colprost(Num,Count):-colprost(Num,1,0,Count).
+
+
+colprost(Num,Num,0):-!.
+colprost(Num,CurNum,Count):-CurNum1 is CurNum + 1, ((nodNumsN(Num,CurNum,Nod), Nod=1) ->Flag is 1;Flag is 0),colprost(Num,CurNum1,Count1),Count is Count1 + Flag.
+colprost(Num,Count):-colprost(Num,1,Count).
