@@ -115,3 +115,16 @@ pr7:-write("Enter str: "),
      write(C1),nl,
      countMi0(S,C,C2),
      write(C2).
+
+%8
+
+strW(_,0,S1):-S1 is 0,!.
+strW(S,C,S1):-C > 0,S = [H|T],(H =:= 119 -> S1 is 119,!;(H =:= 120 -> S1 is 120,!;C1 is (C - 1),strW(T,C1,S1))).
+
+
+pr8:-write("Enter str: "),
+     readStr(S),nl,
+     countN(S,C),
+     strW(S,C,S1),
+     (S1 =:= 0-> write("No X or W in list");(S1 =:= 119 -> write("First in list 'w'");write("First in list 'x'"))).
+
