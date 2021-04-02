@@ -10,11 +10,6 @@ readS(X, A, B) :-
 writeStr([]):-!.
 writeStr([H|T]):-write(H),writeStr(T).
 
-countN([], Count, Count) :- !.
-countN([_|T], CurCount, Count) :-
-  CurCount1 is CurCount + 1,
-  countN(T, CurCount1, Count).
-countN(List, Count) :- countN(List, 0, Count).
 
 
 % 1.Дана строка. Вывести ее три раза через запятую и показать количество
@@ -23,5 +18,11 @@ countN(List, Count) :- countN(List, 0, Count).
 pr1:-
 	readStr(A),
 	writeStr(A),nl,writeStr(A),nl,writeStr(A).
+%2 Дана строка. Найти количество слов.
+numbWords([],_,Count):-Count is 1,!.
 
+numbWords([H|T],CurCount,Count):-(H =:= 32 -> CurCount is 1, numbWords(T,CurCount1,Count1), Count is (Count1 + CurCount);
+                                   numbWords(T,CurCount,Count)).
+numbWordsN([],Count):-Count is 0,!.
+numbWordsN(S,Count):-numbWords(S,CurCount,Count).
 

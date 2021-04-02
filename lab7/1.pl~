@@ -9,6 +9,9 @@ readS(X, A, B) :-
 
 writeStr([]):-!.
 writeStr([H|T]):-write(H),writeStr(T).
+
+
+
 % 1.Дана строка. Вывести ее три раза через запятую и показать количество
 % символов в ней.
 
@@ -16,14 +19,4 @@ pr1:-
 	readStr(A),
 	writeStr(A),nl,writeStr(A),nl,writeStr(A).
 
-
-pr2:-write("Enter your str: "),
-     readStr(S),nl,
-     write("1: "),
-     writeStr(S),nl,
-     write("2: "),
-     writeStr(S),nl,
-     write("3: "),
-     writeStr(S),nl,
-     write("Count of numbers: ").
 
