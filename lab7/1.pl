@@ -61,3 +61,22 @@ pr4:-write("Enter  str: "),
      countN(S,C),
      viv(S,C,S1),
      writeStr(S1).
+
+%5 Дана строка. Показать номера символов, совпадающих с последним
+%символом строки.
+
+lastNumb(S,1,IND):-IND = S,!.
+lastNumb(S,C,IND):-C > 0,C1 is (C - 1),S = [H|T],lastNumb(T,C1,IND).
+
+strInd(S,0,Index,S1):-!.
+strInd(S,C,Index,S1):-C > 0,S = [H|T],(H =:= Index -> S1 = [H1|T1],CurC is (C - 1),H1 is C,strInd(T,CurC,Index,T1);CurC is (C - 1),strInd(T,CurC,Index,S1)).
+
+
+
+pr5:-write("Enter your str: "),
+     readStr(S),nl,
+     countN(S,C),
+     lastNumb(S,C,IND),
+     C1 is (C-1),
+     strInd(S,C1,IND,S1),
+     writeStr(S1).
