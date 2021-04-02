@@ -10,6 +10,12 @@ readS(X, A, B) :-
 writeStr([]):-!.
 writeStr([H|T]):-write(H),writeStr(T).
 
+countN([], Count, Count) :- !.
+countN([_|T], CurCount, Count) :-
+  CurCount1 is CurCount + 1,
+  countN(T, CurCount1, Count).
+countN(List, Count) :- countN(List, 0, Count).
+
 
 
 % 1.Дана строка. Вывести ее три раза через запятую и показать количество
@@ -35,3 +41,23 @@ pr2:-write("Enter str: "),
 %3 Дана строка, определить самое частое слово
 
 
+%4 Дана строка. Вывести первые три символа и последний три символа,
+%если длина строки больше 5 Иначе вывести первый символ столько
+%раз, какова 4 Дана строка.
+
+countV(S,-1,S1):-!.
+countV(S,C,S1):-C >= 0,S = [H|T],S1 = [H1|T1],H1 is H,C1 is (C - 1),countV(S,C1,T1).
+
+newStr3(T,3,T1):-T1 = T,!.
+newStr3(T,CN,T1):-T = [H|TT],countN(TT,CCN),newStr3(TT,CCN,T1).
+
+sec(S,C,S1):-[H1|[H2|[H3|T]]] = S,newStr3(T,C,T1),append([H1,H2,H3],T1,S1).
+
+viv(S,C,S1):-(C > 5 ->(C =:= 6 ->S1 = S;sec(S,C,S1));countV(S,C,S1)).
+
+
+pr4:-write("Enter  str: "),
+     readStr(S),nl,
+     countN(S,C),
+     viv(S,C,S1),
+     writeStr(S1).

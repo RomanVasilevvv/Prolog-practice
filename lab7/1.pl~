@@ -26,3 +26,12 @@ numbWords([H|T],CurCount,Count):-(H =:= 32 -> CurCount is 1, numbWords(T,CurCoun
 numbWordsN([],Count):-Count is 0,!.
 numbWordsN(S,Count):-numbWords(S,CurCount,Count).
 
+
+pr2:-write("Enter str: "),
+     readStr(S),nl,
+     numbWordsN(S,Count),
+     write("Count: "),
+     write(Count).
+%3 ƒана строка, определить самое частое слово
+
+
