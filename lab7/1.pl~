@@ -1,0 +1,29 @@
+readStr(A) :-
+  get0(X),
+  readS(X, A, []).
+readS(10, A, A) :- !.
+readS(X, A, B) :-
+  append(B, [X], B1),
+  get0(X1),
+  readS(X1, A, B1).
+
+writeStr([]):-!.
+writeStr([H|T]):-write(H),writeStr(T).
+% 1.Дана строка. Вывести ее три раза через запятую и показать количество
+% символов в ней.
+
+pr1:-
+	readStr(A),
+	writeStr(A),nl,writeStr(A),nl,writeStr(A).
+
+
+pr2:-write("Enter your str: "),
+     readStr(S),nl,
+     write("1: "),
+     writeStr(S),nl,
+     write("2: "),
+     writeStr(S),nl,
+     write("3: "),
+     writeStr(S),nl,
+     write("Count of numbers: ").
+
