@@ -90,8 +90,28 @@ pr5:-write("Enter your str: "),
 
 
 
-pr6:-write("Enter your str: "),
+pr6:-write("Enter  str: "),
      readStr(S),nl,
      countN(S,C),
      strMod3(S,C,0,S1),
      writeStr(S1).
+%7
+countMi(_,0,Count):-Count is 0,!.
+countMi(S,C,Count):-C > 0,S = [H|T],(((H =:= 43)|(H =:= 45)) ->( C1 is (C - 1),countPlMi(T,C1,Count1),Count is (Count1 + 1));( C1 is (C - 1),countPlMi(T,C1,Count))).
+
+
+countMi0(_,0,Count):-Count is 0,!.
+countMi0(S,C,Count):-C > 0,S = [H|T],T = [H1|T1],
+                    (((H =:= 43)|(H =:= 45)) ->
+                    ( H1 =:= 48 -> C1 is (C - 1),countMi0(T,C1,Count1),Count is (Count1 + 1);C1 is (C - 1),countMi0(T,C1,Count));
+                    ( C1 is (C - 1),countMi0(T,C1,Count))).
+
+
+
+pr7:-write("Enter str: "),
+     readStr(S),nl,
+     countN(S,C),
+     countMi(S,C,C1),
+     write(C1),nl,
+     countMi0(S,C,C2),
+     write(C2).
