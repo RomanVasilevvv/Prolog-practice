@@ -65,18 +65,18 @@ pr4:-write("Enter  str: "),
 %5 Дана строка. Показать номера символов, совпадающих с последним
 %символом строки.
 
-lastNumber(S,1,IND):-IND = S,!.
-lastNumber(S,C,IND):-C > 0,C1 is (C - 1),S = [H|T],lastNumber(T,C1,IND).
+lastNumb(S,1,IND):-IND = S,!.
+lastNumb(S,C,IND):-C > 0,C1 is (C - 1),S = [H|T],lastNumb(T,C1,IND).
 
-strIndexes(S,0,IND,S1):-!.
-strIndexes(S,C,IND,S1):-C > 0,S = [H|T],(H =:= IND -> S1 = [H1|T1],CurC is (C - 1),H1 is C,strIndexes(T,CurC,IND,T1);CurC is (C - 1),strIndexes(T,CurC,IND,S1)).
+strInd(S,0,Index,S1):-!.
+strInd(S,C,Index,S1):-C > 0,S = [H|T],(H =:= Index -> S1 = [H1|T1],CurC is (C - 1),H1 is C,strInd(T,CurC,Index,T1);CurC is (C - 1),strInd(T,CurC,Index,S1)).
 
 
 
 pr5:-write("Enter your str: "),
      readStr(S),nl,
      countN(S,C),
-     lastNumber(S,C,IND),
+     lastNumb(S,C,IND),
      C1 is (C-1),
-     strIndexes(S,C1,IND,S1),
+     strInd(S,C1,IND,S1),
      writeStr(S1).

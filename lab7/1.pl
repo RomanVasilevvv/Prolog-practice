@@ -80,3 +80,18 @@ pr5:-write("Enter your str: "),
      C1 is (C-1),
      strInd(S,C1,IND,S1),
      writeStr(S1).
+
+%6 Дана строка. Показать третий, шестой, девятый и так далее символы.
+  strMod3(_,0,_,_):-!.
+
+  strMod3(S,C,CurC,S1):-C > 0, S = [H|T], (CurC mod 3 =:= 0 -> S1 = [H1|T1],H1 is H, CurC1 is (CurC + 1),C1 is (C - 1),strMod3(T,C1,CurC1,T1);CurC1 is (CurC + 1),C1 is (C - 1),strMod3(T,C1,CurC1,S1)).
+
+  strMod3(S,C,CurC,S1):-CurC is 1, strMod3(S,C,CurC,S1).
+
+
+
+pr6:-write("Enter your str: "),
+     readStr(S),nl,
+     countN(S,C),
+     strMod3(S,C,0,S1),
+     writeStr(S1).
