@@ -1,117 +1,154 @@
-readStr(A) :-
-  get0(X),
-  readS(X, A, []).
-readS(10, A, A) :- !.
-readS(X, A, B) :-
-  append(B, [X], B1),
-  get0(X1),
-  readS(X1, A, B1).
+write_str([]):-!.
+write_str([H|Tail]):-put(H),write_str(Tail).
 
-writeStr([]):-!.
-writeStr([H|T]):-write(H),writeStr(T).
+write_list_str([]):-!.
+write_list_str([H|Tail]):-write_str(H),write(" "),write_list_str(Tail).
 
-countN([], Count, Count) :- !.
-countN([_|T], CurCount, Count) :-
-  CurCount1 is CurCount + 1,
-  countN(T, CurCount1, Count).
-countN(List, Count) :- countN(List, 0, Count).
+read_str(A,N):-get0(X),r_str(X,A,[],N,0).
+r_str(10,A,A,N,N):-!.
+r_str(X,A,B,N,K):-K1 is K+1,append(B,[X],B1),get0(X1),r_str(X1,A,B1,N,K1).
 
+in_list([El|_],El).
+in_list([_|T],El):-in_list(T,El).
 
+append1([],List,List):-!.
+append1([H1|T1],List,[H1|T3]):-append(T1,List,T3).
 
-% 1.Дана строка. Вывести ее три раза через запятую и показать количество
-% символов в ней.
+reverse(A,Z):-reverse(A,Z,[]).
+reverse([],Z,Z).
+reverse([H|T],Z,Acc):- reverse(T,Z,[H|Acc]).
 
-pr1:-
-	readStr(A),
-	writeStr(A),nl,writeStr(A),nl,writeStr(A).
-%2 Дана строка. Найти количество слов.
-numbWords([],_,Count):-Count is 1,!.
-
-numbWords([H|T],CurCount,Count):-(H =:= 32 -> CurCount is 1, numbWords(T,CurCount1,Count1), Count is (Count1 + CurCount);
-                                   numbWords(T,CurCount,Count)).
-numbWordsN([],Count):-Count is 0,!.
-numbWordsN(S,Count):-numbWords(S,CurCount,Count).
+reverse_list(List,ListR):-reverse_list(List,[],ListR).
+reverse_list([],Buffer,Buffer):-!.
+reverse_list([H|T],Buffer,ListR):-reverse_list(T,[H|Buffer],ListR).
 
 
-pr2:-write("Enter str: "),
-     readStr(S),nl,
-     numbWordsN(S,Count),
-     write("Count: "),
-     write(Count).
-%3 Дана строка, определить самое частое слово
+wr_str:-read_str(A,Length),write_str(A),write(","),write_str(A),write(","),write_str(A),write(","),write(Length).
+
+kol_w:-read_str(A,_),append1([32],A,A1),kol_words(A1,0,Kol),write(Kol).
+kol_words([_|[]],Kol,Kol):-!.
+kol_words([H1|[H2|T]],K,Kol):-(H1=32,H2\=32 -> K1 is K+1,kol_words([H2|T],K1,Kol);kol_words([H2|T],K,Kol)).
 
 
-%4 Дана строка. Вывести первые три символа и последний три символа,
-%если длина строки больше 5 Иначе вывести первый символ столько
-%раз, какова 4 Дана строка.
+list_words:-read_str(A,_),append1([32],A,A1),reverse(A1,AR),list_words(AR,[],_,[]).
+list_words([],LW,LW,_):-!.
+list_words([H|T],LW,LWN,W):-(H=32 -> append([W],LW,LW1),list_words(T,LW1,LWN,[]);append1([H],W,W1),list_words(T,LW,LWN,W1)).
 
-countV(S,-1,S1):-!.
-countV(S,C,S1):-C >= 0,S = [H|T],S1 = [H1|T1],H1 is H,C1 is (C - 1),countV(S,C1,T1).
+kol_repeat_in_list([H|T],X,K):-kol_repeat_in_list([H|T],X,0,K).
+kol_repeat_in_list([],_,Kol,Kol):-!.
+kol_repeat_in_list([H|T],X,K,Kol):-(H=X -> K1 is K+1,kol_repeat_in_list(T,X,K1,Kol);kol_repeat_in_list(T,X,K,Kol)).
 
-newStr3(T,3,T1):-T1 = T,!.
-newStr3(T,CN,T1):-T = [H|TT],countN(TT,CCN),newStr3(TT,CCN,T1).
+chsv:-read_str(A,_),append1([32],A,A1),reverse(A1,AR),list_words(AR,[],LW,[]),chsv(LW,_,Word,0,_),write_str(Word).
+chsv([],Word,Word,Kol,Kol):-!.
+chsv([H|T],W,Word,K,Kol):-kol_repeat_in_list([H|T],H,K1),(K1>K -> Kol1 = K1,W1=H,chsv(T,W1,Word,K1,Kol1);chsv(T,W,Word,K,Kol)).
 
-sec(S,C,S1):-[H1|[H2|[H3|T]]] = S,newStr3(T,C,T1),append([H1,H2,H3],T1,S1).
+prover:-read_str(A,Length),(Length>5 -> prover(A),reverse(A,AR),prover(AR);prover(A,Length)).
+prover([H1|[H2|[H3|_]]]):-put(H1),put(H2),put(H3),!.
+prover([_|_],0):-!.
+prover([H|T],Length):-put(H),L1 is Length-1,prover([H|T],L1).
+provLen([H1|[H2|[H3|_]]]):-put(H3),put(H2),put(H1),!.
 
-viv(S,C,S1):-(C > 5 ->(C =:= 6 ->S1 = S;sec(S,C,S1));countV(S,C,S1)).
+length_list([],0):-!.
+length_list([_|T],L):-length_list(T,L1),L is L1+1.
 
+index_end_all:-read_str(Sr,_),reverse(Sr,[H|_],_),EndS = H,list_entry_el(Sr,EndS,_).
 
-pr4:-write("Enter  str: "),
-     readStr(S),nl,
-     countN(S,C),
-     viv(S,C,S1),
-     writeStr(S1).
+list_entry_el([H|T],El,Num):-list_entry_el([H|T],El,Num,0).
+list_entry_el([],_,_,_):-!.
+list_entry_el([H|T],El,Num,Chet):-Chet1 is Chet+1,(H = El,Num1 = Chet1 -> write(Chet1),write(" "),list_entry_el(T,El,Num1,Chet1);list_entry_el(T,El,Num,Chet1)).
 
-%5 Дана строка. Показать номера символов, совпадающих с последним
-%символом строки.
-
-lastNumb(S,1,IND):-IND = S,!.
-lastNumb(S,C,IND):-C > 0,C1 is (C - 1),S = [H|T],lastNumb(T,C1,IND).
-
-strInd(S,0,Index,S1):-!.
-strInd(S,C,Index,S1):-C > 0,S = [H|T],(H =:= Index -> S1 = [H1|T1],CurC is (C - 1),H1 is C,strInd(T,CurC,Index,T1);CurC is (C - 1),strInd(T,CurC,Index,S1)).
-
-
-
-pr5:-write("Enter your str: "),
-     readStr(S),nl,
-     countN(S,C),
-     lastNumb(S,C,IND),
-     C1 is (C-1),
-     strInd(S,C1,IND,S1),
-     writeStr(S1).
-
-%6 Дана строка. Показать третий, шестой, девятый и так далее символы.
-  strMod3(_,0,_,_):-!.
-
-  strMod3(S,C,CurC,S1):-C > 0, S = [H|T], (CurC mod 3 =:= 0 -> S1 = [H1|T1],H1 is H, CurC1 is (CurC + 1),C1 is (C - 1),strMod3(T,C1,CurC1,T1);CurC1 is (CurC + 1),C1 is (C - 1),strMod3(T,C1,CurC1,S1)).
-
-  strMod3(S,C,CurC,S1):-CurC is 1, strMod3(S,C,CurC,S1).
+index_3:-read_str(St,_),index_3(St,0).
+index_3([],_):-!.
+index_3([H|T],Counter):-Counter1 is Counter+1,(0 is Counter1 mod 3 -> put(H),index_3(T,Counter1);index_3(T,Counter1)).
 
 
-
-pr6:-write("Enter  str: "),
-     readStr(S),nl,
-     countN(S,C),
-     strMod3(S,C,0,S1),
-     writeStr(S1).
-%7
-countMi(_,0,Count):-Count is 0,!.
-countMi(S,C,Count):-C > 0,S = [H|T],(((H =:= 43)|(H =:= 45)) ->( C1 is (C - 1),countPlMi(T,C1,Count1),Count is (Count1 + 1));( C1 is (C - 1),countPlMi(T,C1,Count))).
+k_c_s([_|[]],KZ,KZ):-!.
+k_c_s([H1|[H2|T3]],KZero,KolZero):-((H1=43;H1=45),H2=48 -> KZero1 is KZero+1,k_c_s([H2|T3],KZero1,KolZero);k_c_s([H2|T3],KZero,KolZero)).
+kol_p_m:-read_str(St,_),kol_p_m(St,0,KP,0,KM),k_c_s(St,0,KZ),write("Plus = "),write(KP),nl,write("Minus = "),write(KM),nl,write("Zero = "),write(KZ),!.
+kol_p_m([],KP,KP,KM,KM):-!.
+kol_p_m([43|T],KP,KolP,KM,KolM):-KP1 is KP+1,kol_p_m(T,KP1,KolP,KM,KolM).
+kol_p_m([45|T],KP,KolP,KM,KolM):-KM1 is KM+1,kol_p_m(T,KP,KolP,KM1,KolM).
+kol_p_m([_|T],KP,KolP,KM,KolM):-kol_p_m(T,KP,KolP,KM,KolM).
 
 
-countMi0(_,0,Count):-Count is 0,!.
-countMi0(S,C,Count):-C > 0,S = [H|T],T = [H1|T1],
-                    (((H =:= 43)|(H =:= 45)) ->
-                    ( H1 =:= 48 -> C1 is (C - 1),countMi0(T,C1,Count1),Count is (Count1 + 1);C1 is (C - 1),countMi0(T,C1,Count));
-                    ( C1 is (C - 1),countMi0(T,C1,Count))).
+ranshe:-read_str(A,_),pr_w(A,0,Indw),pr_x(A,0,Indx),(Indw<Indx->write("w встречается раньше");write("x встречается раньше")).
+pr_w([],_,_):-write("Не существует w"),!,fail.
+pr_w([Head|Tail],I,Ind):-(Head =:=119 -> Ind is I;I1 is I+1,pr_w(Tail,I1,Ind)).
+
+pr_x([],_,_):-write("Не существует x"),!,fail.
+pr_x([Head|Tail],I,Ind):-(Head =:=120 -> Ind is I;I1 is I+1,pr_x(Tail,I1,Ind)).
+
+big:-read_str(St1,N1),read_str(St2,N2),(N1>N2-> N is N1-N2,big_str(St1,N);N is N2-N1,big_str(St2,N)).
+big_str(_,0):-!.
+big_str(Str,Num):-name(St,Str),write(St),nl,Num1 is Num-1,big_str(Str,Num1).
+
+abc:-read_str(St,_),abc(St,St1),write_str(St1).
+
+abc([H1,H2,H3|T],List1):-H1=97,H2=98,H3=99,List1 = [119,119,119|T],!.
+abc(List,List1):-append1(List,[122,122,122],List1),!.
+
+long:-read_str(Str,Length),(Length>10 -> long(Str,N); long(Str,Length,12,N)),write_str(N).
+long(Str,N):-N=[_,_,_,_,_,_],append1(N,_,Str),!.
+long(N,12,_,N):-!.
+long(Str,L,Length,N):-L1 is L+1,append1(Str,[111],Str1),long(Str1,L1,Length,N).
+
+zamch:-read_str(St,_),zamch(St,0,[],NSt),reverse(NSt,NStR),write_str(NStR).
+zamch([],_,St,St):-!.
+zamch([H|T],Counter,NSt,NStr):-Counter1 is Counter+1,0 is Counter1 mod 2,(H\=97,H\=98 -> append1([97],NSt,NSt1),zamch(T,Counter1,NSt1,NStr),!;
+                                                                             append1([99],NSt,NSt1),zamch(T,Counter1,NSt1,NStr)),!.
+zamch([H|T],Counter,NSt,NStr):-Counter1 is Counter+1,append1([H],NSt,NSt1),zamch(T,Counter1,NSt1,NStr).
 
 
+kol_ch:-read_str(St,_),kol_ch(St,0,Kol),write(Kol).
+kol_ch([],K,K):-!.
+kol_ch([H|T],K,Kol):-H>47,H<58,K1 is K+1,kol_ch(T,K1,Kol),!.
+kol_ch([_|T],K,Kol):-kol_ch(T,K,Kol),!.
 
-pr7:-write("Enter str: "),
-     readStr(S),nl,
-     countN(S,C),
-     countMi(S,C,C1),
-     write(C1),nl,
-     countMi0(S,C,C2),
-     write(C2).
+soderj:-read_str(Str,_),soderj(Str).
+soderj([]):-!.
+soderj([H|_]):-H\=97,H\=98,H\=99,!,fail.
+soderj([_|T]):-soderj(T).
+
+
+zam_wo_le:-read_str(Str,_),zam_wo_le(Str,[],NL),write_str(NL).
+zam_wo_le([],NL,NL):-!.
+zam_wo_le([119,111,114,100|T],Buffer,NL):-append1(Buffer,[108,101,116,116,101,114],BufferN),zam_wo_le(T,BufferN,NL),!.
+zam_wo_le([H|T],Buffer,NL):-append1(Buffer,[H],BufferN),zam_wo_le(T,BufferN,NL),!.
+
+del_x:-read_str(St,_),del_x(St,[],NL),write_str(NL).
+del_x([],NL,NL):-!.
+del_x([120,97,98,99|T],Buffer,NL):-append1(Buffer,[97,98,99],BufferN),del_x(T,BufferN,NL),!.
+del_x([H|T],Buffer,NL):-append1(Buffer,[H],BufferN),del_x(T,BufferN,NL).
+
+del_abc:-read_str(St,_),del_abc(St,[],NL),write_str(NL).
+del_abc([],NL,NL):-!.
+del_abc([97,98,99,H|T],Buffer,NL):-H>47,H<58,del_abc([H|T],Buffer,NL),!.
+del_abc([H|T],Buffer,NL):-append1(Buffer,[H],BufferN),del_abc(T,BufferN,NL).
+
+kol_aba:-read_str(St,_),kol_aba(St,0,Kol),write(Kol).
+kol_aba([],K,K):-!.
+kol_aba([97,98,97|T],K,Kol):-K1 is K+1,kol_aba(T,K1,Kol),!.
+kol_aba([_|T],K,Kol):-kol_aba(T,K,Kol).
+
+del_probel:-read_str(St,_),del_probel(St,0,[],NSt),del_probel(NSt,StStart),reverse(StStart,StEnd),del_probel(StEnd,Stroka),reverse(Stroka,StrokaR),write_str(StrokaR).
+del_probel([],_,NL,NL):-!.
+del_probel([32|T],0,Buffer,NL):-append1(Buffer,[32],BufferN),del_probel(T,1,BufferN,NL),!.
+del_probel([32|T],KolWS,Buffer,NL):-del_probel(T,KolWS,Buffer,NL),!.
+del_probel([H|T],_,Buffer,NL):-append1(Buffer,[H],BufferN),del_probel(T,0,BufferN,NL),!.
+del_probel([32|T],NSt):-del_probel(T,NSt),!.
+del_probel(Nst,Nst):-!.
+
+num:-read_str([H|T],_),read_str(St2,_),(in_list(St2,H) -> num(T,St2,[],[],LW);num([H|T],St2,[],[],LW)),write_list_str(LW).
+num([],_,[],LW,LW):-!.
+num([],_,LastWord,LW,ListWord):-append1(LW,[LastWord],ListWord),!.
+num([H|T],List2,BufferWord,LW,ListWord):-not(in_list(List2,H)),append1(BufferWord,[H],BufferWordN),num(T,List2,BufferWordN,LW,ListWord),!.
+num([_|T],List2,BufferWord,LW,ListWord):-append1(LW,[BufferWord],NLW),num(T,List2,[],NLW,ListWord).
+
+wiv_1_2_3:-read_str(St,Length),wiv_1_2_3(St),wiv_1_2_3(St,Length).
+wiv_1_2_3([H|T]):-write("First = "),put(H),nl,reverse([H|T],[HR|_]),write("End = "),put(HR),nl.
+wiv_1_2_3(List,Length):-not(0 is Length mod 2),L is Length div 2+1,index(List,El,L,0),write("Middle = "),put(El),!.
+wiv_1_2_3(_,_):-true.
+
+index([H|T],El,Num):-index([H|T],El,Num,0).
+index([H|T],El,Num,Chet):-Chet1 is Chet+1,(H = El,Num = Chet1 -> !;index(T,El,Num,Chet1)).
+
