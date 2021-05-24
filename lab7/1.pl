@@ -553,3 +553,42 @@ task18 :-
   write("New Str => ["),
   write_str(NewS),
   write("]").
+% Задание 19
+% количество вхождения aba в строку
+count_aba_in_str([_, _], Count, Count) :- !.
+count_aba_in_str([_], Count, Count) :- !.
+count_aba_in_str([], Count, Count) :- !.
+count_aba_in_str([H1|[H2|[H3|T]]], CurCount, Count) :-
+  ((H1 = 97, H2 = 98, H3 = 97) ->
+  CurCount1 is CurCount + 1;
+  CurCount1 is CurCount),
+  count_aba_in_str([H2|[H3|T]], CurCount1, Count).
+count_aba_in_str(List, Count) :- count_aba_in_str(List, 0, Count).
+
+task19 :-
+  write("Str -> "),
+  read_str_nofix(S),
+  count_aba_in_str(S, Count),
+  write("Count \'aba\' in str => "),
+  write(Count).
+
+% Задание 20
+% составим список слов
+% далее будет вытаскивать слово из списка и ставить после него пробел
+% после последнего слова списка пробел не ставим
+str_with1space([], Str, Str) :- write("Str hasn\'t words"), !.
+str_with1space([H], CurStr, Str) :- append(CurStr, H, Str), !.
+str_with1space([H|T], CurStr, Str) :-
+  append(H, [32], H1),
+  append(CurStr, H1, CurStr1),
+  str_with1space(T, CurStr1, Str).
+str_with1space(List, Str) :- str_with1space(List, [], Str).
+
+task20 :-
+  write("Str -> "),
+  read_str_nofix(S),
+  list_of_words(S, Words),
+  str_with1space(Words, NewS),
+  write("New Str => ["),
+  write_str(NewS),
+  write("]").
