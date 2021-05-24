@@ -443,3 +443,31 @@ task12 :-
   write("Ascinated => "), nl,
   list_of_asc_strs(Words, WordsASC),
   write_list_str(WordsASC).
+% Задание 13
+% меняем каждый чётный символ на другой
+rpc_mod2el([H1], CurList, List) :- append(CurList, [H1], List), !.
+rpc_mod2el([], List, List) :- !.
+rpc_mod2el([H1|[H2|T]], CurList, List) :-
+  ((H2 = 97 | H2 = 98) ->
+  append(CurList, [H1, 99], CurList1);
+  append(CurList, [H1, 97], CurList1)),
+  rpc_mod2el(T, CurList1, List).
+rpc_mod2el(List, NewList) :- rpc_mod2el(List, [], NewList).
+
+task13 :-
+  write("Str -> "),
+  read_str_nofix(S),
+  rpc_mod2el(S, NewS),
+  write("["),
+  write_str(NewS),
+  write("]").
+
+% Задание 14
+% ищем количество цифр в строке
+list_count_digits([], Count, Count) :- !.
+list_count_digits([H|T], CurCount, Count) :-
+  ((H >= 48, H =< 57) ->
+  CurCount1 is CurCount + 1;
+  CurCount1 is CurCount),
+  list_count_digits(T, CurCount1, Count).
+list_count_digits(List, Count) :- list_count_digits(List, 0, Count).
