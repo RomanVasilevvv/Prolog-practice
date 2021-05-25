@@ -73,4 +73,37 @@ pr_sochet_p(A,K):-sochet_p(B,K,A),write_str(B),nl,fail.
 all_sochet_povtor:-read_str(A,_),read(K),tell('D:/Prolog-practice/lab9/111.txt'),
 			not(pr_sochet_p(A,K)),told.
 
+%Задание 2 Дано множество {a,b,c,d,e,f}. Построить все слова длины 5, в
+%которых ровно две буквы a. Вывод в файл.
+
+make_ar(0,[]):-!.
+make_ar(K,[K|Tail]):-K1 is K-1,make_ar(K1,Tail).
+
+razm_p:-tell('D:/Prolog-practice/lab9/111.txt'),not(razm_P),told.
+razm_P:-make_ar(5,Pos),sochet(Pos_a,2,Pos),put_p(Word,Pos_a,[97]),
+in_list([98,99,100,101,102],S1), in_free_p(Word,S1), in_list([98,99,100,101,102],S2),in_free_p(Word,S2),in_list([98,99,100,101,102],S3),in_free_p(Word,S3),
+write_str(Word),nl,fail.
+
+put_p(Word,[Head1,Head2],[Sim]):-select_p(Word,Head1,Sim),
+select_p(Word,Head2,Sim).
+
+select_p(Word,Head,Sim):-(Head is 1->Word=[Sim,_,_,_,_],!);
+(Head is 2->Word=[_,Sim,_,_,_],!);(Head is 3->Word=[_,_,Sim,_,_],!);(Head is 4->Word=[_,_,_,Sim,_],!);(Head is 5->Word=[_,_,_,_,Sim]).
+
+in_free_p([H1,H2,H3,H4,H5],Sim):-(var(H1)->H1 is Sim),!;
+(var(H2)->H2 is Sim),!;(var(H3)->H3 is Sim),!; (var(H4)->H4 is Sim),!;(var(H5)->H5 is Sim).
+
+%Задание 3 Дано множество {a,b,c,d,e,f}. Построить все слова длины 5, в
+%которых ровно 2 буквы a, остальные буквы не повторяются. Вывод в файл.
+razmeshchen:-tell('D:/Prolog-practice/lab9/111.txt'),not(razmeshchen_1),told.
+razmeshchen_1:-make_ar(5,Pos),sochet(Pos_a,2,Pos),put_p(Word,Pos_a,[97]),
+		 in_list_exlude([98,99,100,101,102],S1,NList),
+		 in_free_p(Word,S1),
+		 in_list_exlude(NList,S2,NList1),
+		 in_free_p(Word,S2),
+		 in_list_exlude(NList1,S3,_),
+		 in_free_p(Word,S3),
+		 write_str(Word),nl,fail.
+
+
 
