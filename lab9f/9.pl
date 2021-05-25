@@ -195,4 +195,119 @@ in_free_pos7([H1,H2,H3,H4,H5,H6,H7],Sim):-(var(H1)->H1 is Sim),!;
 				  (var(H7)->H7 is Sim).
 
 
+%Задание 7 Дано множество {a,b,c,d,e,f}. Построить все слова длины 9, в
+%которых ровно 2 буквы повторяются 2 раза, ровно одна буква повторяется
+%три раза, остальные буквы не повторяются. Вывод в файл.
+
+length_9_2_letter_2_times:-tell('D:/Prolog-practice/lab9/111.txt'),not(length_9_2_letter_2_times_),told.
+length_9_2_letter_2_times_:-make_ar(9,Pos),sochet([H1,H2],2,Pos),in_list([97,98,99,100,101,102],Simbol1), %выбрали 2 позиции в слове и символ на эту позицию
+put_pos9(Word,[H1,H2],[Simbol1]), %put pos  ставит на выбранные позиции символ,
+
+in_list_exlude([97,98,99,100,101,102],Simbol1,NList),in_list_exlude(Pos,H1,NPos),in_list_exlude(NPos,H2,NNPos),% убрали сивол из списка символов и из списка мест убрали 2 позиции из предыдущего шага
+
+sochet([H3, H4],2,NNPos),in_list(NList,Simbol2),put_pos9(Word,[H3,H4],[Simbol2]),% выбрали 2 места под второй символ выбрали второй символ и поставили его на эти 2 места
+
+in_list_exlude(NList,Simbol2,NList_),in_list_exlude(NNPos,H3,EPos),in_list_exlude(EPos,H4,Pos_),% убрали второй символ и места из под него
+
+sochet(Pos1_,3,Pos_),in_list_exlude(NList_,Simbol3, LastSimbol),put_pos93(Word,Pos1_,[Simbol3]),%выбрали 3 места под третий символ и поставили его
+		 in_list_exlude(LastSimbol,S1,LastSimbol1),%выбрали и убрали 4 третий символ
+		 in_free_pos9(Word,S1),% поставили 4 символ
+		 in_list_exlude(LastSimbol1,S2,_),%выбрали и убрали 5 символ
+		 in_free_pos9(Word,S2),% поставили 5 символ
+		 write_str(Word),nl,fail.
+
+put_pos9(Word,[Head1,Head2],[Sim]):-select_pos9(Word,Head1,Sim),select_pos9(Word,Head2,Sim).
+select_pos9(Word,Head,Sim):-(Head is 1->Word=[Sim,_,_,_,_,_,_,_,_],!);
+							(Head is 2->Word=[_,Sim,_,_,_,_,_,_,_],!);
+							(Head is 3->Word=[_,_,Sim,_,_,_,_,_,_],!);
+							(Head is 4->Word=[_,_,_,Sim,_,_,_,_,_],!);
+							(Head is 5->Word=[_,_,_,_,Sim,_,_,_,_],!);
+							(Head is 6->Word=[_,_,_,_,_,Sim,_,_,_],!);
+							(Head is 7->Word=[_,_,_,_,_,_,Sim,_,_],!);
+							(Head is 8->Word=[_,_,_,_,_,_,_,Sim,_],!);
+							(Head is 9->Word=[_,_,_,_,_,_,_,_,Sim]).
+
+put_pos93(Word,[Head1,Head2,Head3],[Sim]):-select_pos9(Word,Head1,Sim),select_pos9(Word,Head2,Sim), select_pos9(Word,Head3,Sim).
+select_pos9(Word,Head,Sim):-(Head is 1->Word=[Sim,_,_,_,_,_,_,_,_],!);
+							(Head is 2->Word=[_,Sim,_,_,_,_,_,_,_],!);
+							(Head is 3->Word=[_,_,Sim,_,_,_,_,_,_],!);
+							(Head is 4->Word=[_,_,_,Sim,_,_,_,_,_],!);
+							(Head is 5->Word=[_,_,_,_,Sim,_,_,_,_],!);
+							(Head is 6->Word=[_,_,_,_,_,Sim,_,_,_],!);
+							(Head is 7->Word=[_,_,_,_,_,_,Sim,_,_],!);
+							(Head is 8->Word=[_,_,_,_,_,_,_,Sim,_],!);
+							(Head is 9->Word=[_,_,_,_,_,_,_,_,Sim]).
+
+in_free_pos9([H1,H2,H3,H4,H5,H6,H7,H8,H9],Sim):-(var(H1)->H1 is Sim),!;
+				  (var(H2)->H2 is Sim),!;
+				  (var(H3)->H3 is Sim),!;
+				  (var(H4)->H4 is Sim),!;
+				  (var(H5)->H5 is Sim),!;
+				  (var(H6)->H6 is Sim),!;
+				  (var(H7)->H7 is Sim),!;
+				  (var(H8)->H8 is Sim),!;
+				  (var(H9)->H9 is Sim).
+%Задание 9 Дано множество {a,b,c,d,e,f}. Построить все слова длины 7, в
+%которых больше двух букв а. Вывод в файл.
+
+length_4_is_greater_than_2_a:-tell('D:/Prolog-practice/lab9/111.txt'),not(length_4_is_greater_than_2_a_),nl,told.
+length_4_is_greater_than_2_a_:-make_ar(7,Pos),sochet(Pos_a,3,Pos),put_pos73(Word,Pos_a,[97]),
+		 in_list([97,98,99,100,101,102],S1),
+		 in_free_pos7(Word,S1),
+		 in_list([97,98,99,100,101,102],S2),
+		 in_free_pos7(Word,S2),
+		 in_list([97,98,99,100,101,102],S3),
+		 in_free_pos7(Word,S3),
+		 in_list([97,98,99,100,101,102],S3),
+		 in_free_pos7(Word,S3),
+		 write_str(Word),nl,fail.
+
+number_7:-tell('D:/Prolog-practice/lab9/111.txt'),not(number_7_),told.
+number_7_:-make_ar(9,Pos),sochet([H1,H2],2,Pos),in_list([97,98,99,100,101,102],Simbol1), %выбрали 2 позиции в слове и символ на эту позицию
+put_pos9(Word,[H1,H2],[Simbol1]), %put pos  ставит на выбранные позиции символ,
+
+in_list_exlude([97,98,99,100,101,102],Simbol1,NList),in_list_exlude(Pos,H1,NPos),in_list_exlude(NPos,H2,NNPos),% убрали сивол из списка символов и из списка мест убрали 2 позиции из предыдущего шага
+
+sochet([H3, H4],2,NNPos),in_list(NList,Simbol2),put_pos9(Word,[H3,H4],[Simbol2]),% выбрали 2 места под второй символ выбрали второй символ и поставили его на эти 2 места
+
+in_list_exlude(NList,Simbol2,NList_),in_list_exlude(NNPos,H3,EPos),in_list_exlude(EPos,H4,Pos_),% убрали второй символ и места из под него
+
+sochet(Pos1_,3,Pos_),in_list_exlude(NList_,Simbol3, LastSimbol),put_pos93(Word,Pos1_,[Simbol3]),%выбрали 3 места под третий символ и поставили его
+		 in_list_exlude(LastSimbol,S1,LastSimbol1),%выбрали и убрали 4 третий символ
+		 in_free_pos9(Word,S1),% поставили 4 символ
+		 in_list_exlude(LastSimbol1,S2,_),%выбрали и убрали 5 символ
+		 in_free_pos9(Word,S2),% поставили 5 символ
+		 write_str(Word),nl,fail.
+
+put_pos9(Word,[Head1,Head2],[Sim]):-select_pos9(Word,Head1,Sim),select_pos9(Word,Head2,Sim).
+select_pos9(Word,Head,Sim):-(Head is 1->Word=[Sim,_,_,_,_,_,_,_,_],!);
+							(Head is 2->Word=[_,Sim,_,_,_,_,_,_,_],!);
+							(Head is 3->Word=[_,_,Sim,_,_,_,_,_,_],!);
+							(Head is 4->Word=[_,_,_,Sim,_,_,_,_,_],!);
+							(Head is 5->Word=[_,_,_,_,Sim,_,_,_,_],!);
+							(Head is 6->Word=[_,_,_,_,_,Sim,_,_,_],!);
+							(Head is 7->Word=[_,_,_,_,_,_,Sim,_,_],!);
+							(Head is 8->Word=[_,_,_,_,_,_,_,Sim,_],!);
+							(Head is 9->Word=[_,_,_,_,_,_,_,_,Sim]).
+
+put_pos93(Word,[Head1,Head2,Head3],[Sim]):-select_pos9(Word,Head1,Sim),select_pos9(Word,Head2,Sim), select_pos9(Word,Head3,Sim).
+select_pos9(Word,Head,Sim):-(Head is 1->Word=[Sim,_,_,_,_,_,_,_,_],!);
+							(Head is 2->Word=[_,Sim,_,_,_,_,_,_,_],!);
+							(Head is 3->Word=[_,_,Sim,_,_,_,_,_,_],!);
+							(Head is 4->Word=[_,_,_,Sim,_,_,_,_,_],!);
+							(Head is 5->Word=[_,_,_,_,Sim,_,_,_,_],!);
+							(Head is 6->Word=[_,_,_,_,_,Sim,_,_,_],!);
+							(Head is 7->Word=[_,_,_,_,_,_,Sim,_,_],!);
+							(Head is 8->Word=[_,_,_,_,_,_,_,Sim,_],!);
+							(Head is 9->Word=[_,_,_,_,_,_,_,_,Sim]).
+
+in_free_pos9([H1,H2,H3,H4,H5,H6,H7,H8,H9],Sim):-(var(H1)->H1 is Sim),!;
+				  (var(H2)->H2 is Sim),!;
+				  (var(H3)->H3 is Sim),!;
+				  (var(H4)->H4 is Sim),!;
+				  (var(H5)->H5 is Sim),!;
+				  (var(H6)->H6 is Sim),!;
+				  (var(H7)->H7 is Sim),!;
+				  (var(H8)->H8 is Sim),!;
+				  (var(H9)->H9 is Sim).
 
