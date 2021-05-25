@@ -105,5 +105,53 @@ razmeshchen_1:-make_ar(5,Pos),sochet(Pos_a,2,Pos),put_p(Word,Pos_a,[97]),
 		 in_free_p(Word,S3),
 		 write_str(Word),nl,fail.
 
+%Задание 4 Дано множество {a,b,c,d,e,f}. Построить все слова длины 5, в
+%которых ровно одна буква повторяется 2 раза, остальные буквы не
+%повторяются. Вывод в файл.
+
+one_character_2_times:-tell('D:/Prolog-practice/lab9/111.txt'),not(one_character_2_times_),told.
+one_character_2_times_:-make_ar(5,Pos),sochet(Pos_simb,2,Pos),in_list([97,98,99,100,101,102],Simbol),
+		 put_p(Word,Pos_simb,[Simbol]),in_list_exlude([97,98,99,100,101,102],Simbol,List),
+		 in_list_exlude(List,S1,NList),
+		 in_free_p(Word,S1),
+		 in_list_exlude(NList,S2,NList1),
+		 in_free_p(Word,S2),
+		 in_list_exlude(NList1,S3,_),
+		 in_free_p(Word,S3),
+		 write_str(Word),nl,fail.
+
+%Задание 5 Дано множество {a,b,c,d,e,f}. Построить все слова длины 6, в
+%которых ровно 2 буквы повторяются 2 раза, остальные буквы не
+%повторяются. Вывод в файл.
+
+two_characters_2_times:-tell('D:/Prolog-practice/lab9/111.txt'),not(two_characters_2_times_),told.
+two_characters_2_times_:-make_ar(6,Pos),sochet([H1,H2],2,Pos),in_list([97,98,99,100,101,102],Simbol1),
+		 put_pos(Word,[H1,H2],[Simbol1]),in_list_exlude([97,98,99,100,101,102],Simbol1,NList),
+		 in_list_exlude(Pos,H1,NPos),in_list_exlude(NPos,H2,NNPos),
+		 sochet(Pos_,2,NNPos),in_list(NList,Simbol2),put_pos(Word,Pos_,[Simbol2]),
+		 in_list_exlude(NList,Simbol2,LastSimbol),
+		 in_list_exlude(LastSimbol,S1,LastSimbol1),
+		 in_free_p6(Word,S1),
+		 in_list_exlude(LastSimbol1,S2,_),
+		 in_free_p6(Word,S2),
+		 write_str(Word),nl,fail.
+
+put_pos(Word,[Head1,Head2],[Sim]):-select_pos(Word,Head1,Sim),
+select_pos(Word,Head2,Sim).
+
+select_pos(Word,Head,Sim):-(Head is 1->Word=[Sim,_,_,_,_,_],!);
+(Head is 2->Word=[_,Sim,_,_,_,_],!);
+(Head is 3->Word=[_,_,Sim,_,_,_],!);
+(Head is 4->Word=[_,_,_,Sim,_,_],!);
+(Head is 5->Word=[_,_,_,_,Sim,_],!);
+(Head is 6->Word=[_,_,_,_,_,Sim]).
+
+in_free_p6([H1,H2,H3,H4,H5,H6],Sim):-(var(H1)->H1 is Sim),!;
+(var(H2)->H2 is Sim),!;
+(var(H3)->H3 is Sim),!;
+(var(H4)->H4 is Sim),!;
+(var(H5)->H5 is Sim),!;
+(var(H6)->H6 is Sim).
+
 
 
