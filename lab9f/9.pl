@@ -152,6 +152,47 @@ in_free_p6([H1,H2,H3,H4,H5,H6],Sim):-(var(H1)->H1 is Sim),!;
 (var(H4)->H4 is Sim),!;
 (var(H5)->H5 is Sim),!;
 (var(H6)->H6 is Sim).
+%Задание 6 Дано множество {a,b,c,d,e,f}. Построить все слова длины 7, в
+%которых ровно 1 буква повторяются 2 раза, ровно одна буква повторяется
+%3 раза остальные буквы не повторяются. Вывод в файл.
+
+length_7_1_letter_2_times:-tell('D:/Prolog-practice/lab9/111.txt'),not(length_7_1_letter_2_times_),told.
+length_7_1_letter_2_times_:-make_ar(7,Pos),sochet([H1,H2],2,Pos),in_list([97,98,99,100,101,102],Simbol1), %выбрали 2 позиции в слове и символ на эту позицию
+put_pos7(Word,[H1,H2],[Simbol1]), %put pos  ставит на выбранные позиции символ,
+in_list_exlude([97,98,99,100,101,102],Simbol1,NList),in_list_exlude(Pos,H1,NPos),in_list_exlude(NPos,H2,NNPos),% убрали сивол из списка символов и из списка мест убрали 2 позиции из предыдущего шага
+sochet(Pos_,3,NNPos),in_list(NList,Simbol2),put_pos73(Word,Pos_,[Simbol2]),% выбрали 2 места под второй символб выбрали второй символ и поставили его на эти 2 места
+		 in_list_exlude(NList,Simbol2,LastSimbol),%убрали второй сивол из списка
+		 in_list_exlude(LastSimbol,S1,LastSimbol1),%выбрали и убрали третий символ
+		 in_free_pos7(Word,S1),% поставили третий символ
+		 in_list_exlude(LastSimbol1,S2,_),%выбрали и убрали четвертый символ
+		 in_free_pos7(Word,S2),% поставили четвертый символ
+		 write_str(Word),nl,fail.
+
+put_pos7(Word,[Head1,Head2],[Sim]):-select_pos7(Word,Head1,Sim),select_pos7(Word,Head2,Sim).
+select_pos7(Word,Head,Sim):-(Head is 1->Word=[Sim,_,_,_,_,_,_],!);
+							(Head is 2->Word=[_,Sim,_,_,_,_,_],!);
+							(Head is 3->Word=[_,_,Sim,_,_,_,_],!);
+							(Head is 4->Word=[_,_,_,Sim,_,_,_],!);
+							(Head is 5->Word=[_,_,_,_,Sim,_,_],!);
+							(Head is 6->Word=[_,_,_,_,_,Sim,_],!);
+							(Head is 7->Word=[_,_,_,_,_,_,Sim]).
+
+put_pos73(Word,[Head1,Head2, Head3],[Sim]):-select_pos7(Word,Head1,Sim),select_pos7(Word,Head2,Sim), select_pos7(Word,Head3,Sim).
+select_pos7(Word,Head,Sim):-(Head is 1->Word=[Sim,_,_,_,_,_,_],!);
+							(Head is 2->Word=[_,Sim,_,_,_,_,_],!);
+							(Head is 3->Word=[_,_,Sim,_,_,_,_],!);
+							(Head is 4->Word=[_,_,_,Sim,_,_,_],!);
+							(Head is 5->Word=[_,_,_,_,Sim,_,_],!);
+							(Head is 6->Word=[_,_,_,_,_,Sim,_],!);
+							(Head is 7->Word=[_,_,_,_,_,_,Sim]).
+
+in_free_pos7([H1,H2,H3,H4,H5,H6,H7],Sim):-(var(H1)->H1 is Sim),!;
+				  (var(H2)->H2 is Sim),!;
+				  (var(H3)->H3 is Sim),!;
+				  (var(H4)->H4 is Sim),!;
+				  (var(H5)->H5 is Sim),!;
+				  (var(H6)->H6 is Sim),!;
+				  (var(H7)->H7 is Sim).
 
 
 
