@@ -2,20 +2,20 @@ read_str(A,N):-get0(X),r_str(X,A,[],N,0).
 r_str(10,A,A,N,N):-!.
 r_str(X,A,B,N,K):-K1 is K+1,append(B,[X],B1),get0(X1),r_str(X1,A,B1,N,K1).
 
-% 1 Р”Р°РЅРѕ РґРІР° СЃРјРµС€Р°РЅРЅС‹С… РіСЂР°С„Р°, РґР»СЏ РєРѕС‚РѕСЂС‹С… РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ СѓРєР°Р·Р°РЅРѕРјРЅРѕР¶РµСЃС‚РІРѕ
-% РІРµСЂС€РёРЅ. РџРѕСЃС‚СЂРѕРёС‚СЊ РѕР±СЉРµРґРёРЅРµРЅРёРµ, РїРµСЂРµСЃРµС‡РµРЅРёРµ Рё СЃСѓРјРјСѓ РїРѕ РјРѕРґСѓР»СЋ РґРІР° СЌС‚РёС…
-% РіСЂР°С„РѕРІ.
-ob_per_sum:-write("1 РіСЂР°С„"),nl,get_Ver(V1),nl,get_edges(V1,E1),write("2 РіСЂР°С„"),nl,get_Ver(V2),nl,get_edges(V2,E2),write("1 РіСЂР°С„: "),write(V1),write(E1),nl,write("2 РіСЂР°С„: "),write(V2),write(E2),nl,nl,write("РѕР±СЉРµРґРёРЅРµРЅРёРµ:"),nl,union(V1,V2,E1,E2),nl,write("РїРµСЂРµСЃРµС‡РµРЅРёРµ:"),nl,intersection(V1,V2,E1,E2),nl,write("СЃСѓРјРјР° РїРѕ РјРѕРґСѓР»СЋ 2:"),nl,sum(V1,V2,E1,E2).
+% 1 Дано два смешанных графа, для которых обязательно указаномножество
+% вершин. Построить объединение, пересечение и сумму по модулю два этих
+% графов.
+ob_per_sum:-write("1 граф"),nl,get_Ver(V1),nl,get_edges(V1,E1),write("2 граф"),nl,get_Ver(V2),nl,get_edges(V2,E2),write("1 граф: "),write(V1),write(E1),nl,write("2 2 Граф: "),write(V2),write(E2),nl,nl,write("объединение:"),nl,union(V1,V2,E1,E2),nl,write("Пересечение:"),nl,intersection(V1,V2,E1,E2),nl,write("сумма по модулю 2:"),nl,sum(V1,V2,E1,E2).
 
-get_Ver(V):-nl,write("РєРѕР»РёС‡РµСЃС‚РІРѕ РІРµСЂС€РёРЅ = "),read(N),nl,write("РІРµСЂС€РёРЅС‹: "),nl,N1 is N+1,get_Ver([_|V],N1).
+get_Ver(V):-nl,write("количество вершин = "),read(N),nl,write("вершины: "),nl,N1 is N+1,get_Ver([_|V],N1).
 get_Ver([],0):-!.
 get_Ver([H|T],N):-read_str(X,_),name(H,X),N1 is N-1,get_Ver(T,N1).
 
-get_edges(V,E):-nl,write("РєРѕР»РёС‡РµСЃС‚РІРѕ СЂРµР±РµСЂ = "),read(M),nl,write("РќР°С‡Р°Р»Рѕ СЂРµР±СЂР°: "),nl,get0(X),get_edges(V,E,[],M,0).
+get_edges(V,E):-nl,write("количество ребер = "),read(M),nl,write("Начало ребра: "),nl,get0(X),get_edges(V,E,[],M,0).
 get_edges(_,E,E,M,M):-!.
 get_edges(V,E,Edges,M,Count):-get_edge(V,Edge),append(Edges,[Edge],E1),Count1 is Count+1,get_edges(V,E,E1,M,Count1).
 
-get_edge(V,[V1,V2]):-write("РљРѕРЅРµС† СЂРµР±СЂР°:"),nl,read_str(X,_),name(V1,X),check_ver(V,V1),read_str(Y,_),name(V2,Y),check_ver(V,V2).
+get_edge(V,[V1,V2]):-write("конец ребра:"),nl,read_str(X,_),name(V1,X),check_ver(V,V1),read_str(Y,_),name(V2,Y),check_ver(V,V2).
 
 check_ver([V1|_],V1):-!.
 check_ver([_|T],V1):-check_ver(T,V1).
@@ -23,7 +23,7 @@ check_ver([_|T],V1):-check_ver(T,V1).
 in_list([El|_],El):-!.
 in_list([_|L],El):-in_list(L,El),!.
 
-union(V1,V2,E1,E2):-u_vertexes(V1,V2,V3),u_edges(E1,E2,E3),write("РІРµСЂС€РёРЅС‹:"),write(V3),nl,write("СЂРµР±СЂР°:"),nl,write(E3),nl.
+union(V1,V2,E1,E2):-u_vertexes(V1,V2,V3),u_edges(E1,E2,E3),write("вершины:"),write(V3),nl,write("ребра:"),nl,write(E3),nl.
 
 u_vertexes(V,[],V):-!.
 u_vertexes(V1,[H|V2],V3):-not(in_list(V1,H))->append(V1,[H],V),u_vertexes(V,V2,V3),!.
@@ -43,7 +43,7 @@ i_edges(_,[],[]):-!.
 i_edges(E1,[H|E2],[H|E3]):-in_list(E1,H)->i_edges(E1,E2,E3),!.
 i_edges(E1,[_|E2],E3):-i_edges(E1,E2,E3),!.
 
-sum(V1,V2,E1,E2):-s_vertexes(V1,V2,V3),s_edges(E1,E2,E3),write("РІРµСЂС€РёРЅС‹:"),write(V3),nl,write("СЂРµР±СЂР°:"),nl,write(E3).
+sum(V1,V2,E1,E2):-s_vertexes(V1,V2,V3),s_edges(E1,E2,E3),write("вершины:"),write(V3),nl,write("ребра:"),nl,write(E3).
 
 s_vertexes(V1,V2,V3):-s_vertexes1(V1,V2,V31),s_vertexes1(V2,V1,V32),append(V31,V32,V3).
 s_vertexes1(_,[],[]):-!.
