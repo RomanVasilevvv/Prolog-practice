@@ -592,3 +592,71 @@ task20 :-
   write("New Str => ["),
   write_str(NewS),
   write("]").
+
+% Задание 21
+% в первой строке слова
+% во второй разделяющие символы
+% если первая строка закончилась, вторая нет - кидаем слово в текущий лист
+% если вторая закончилась, первая нет - кидаем первую в текущий лист
+% задача в целом:
+% если символы не равны, то кидаем символ из S1 в слово
+% иначе обнуляем слово и кидаем в список, если оно непустое
+read_words_which_split_by_chrs1([], _, Word, CurList, List) :- append(CurList, [Word], List), !.
+read_words_which_split_by_chrs1(SubStr, [], _, CurList, List) :- append(CurList, [SubStr], List), !.
+read_words_which_split_by_chrs1([H1|T1], [H2|T2], Word, CurList, List) :-
+  (H1 = H2 ->
+  ((Word \= [] ->
+  (append(CurList, [Word], CurList1),
+  Word1 = []);
+  (CurList1 = CurList,
+  Word1 = [])), Flag = 0);
+  (append(Word, [H1], Word1),
+  CurList1 = CurList,
+  Flag = 1)),
+  (Flag = 0 ->
+  read_words_which_split_by_chrs1(T1, T2, Word1, CurList1, List);
+  read_words_which_split_by_chrs1(T1, [H2|T2], Word1, CurList1, List)).
+read_words_which_split_by_chrs1(S1, S2, List) :- read_words_which_split_by_chrs1(S1, S2, [], [], List).
+
+% вторая реализация (с чтением пустого слова между разделителями)
+read_words_which_split_by_chrs2([], _, Word, CurList, List) :- append(CurList, [Word], List), !.
+read_words_which_split_by_chrs2(SubStr, [], _, CurList, List) :- append(CurList, [SubStr], List), !.
+read_words_which_split_by_chrs2([H1|T1], [H2|T2], Word, CurList, List) :-
+  (H1 = H2 ->
+  (append(CurList, [Word], CurList1),
+  Flag = 0, Word1 = []);
+  (append(Word, [H1], Word1),
+  CurList1 = CurList,
+  Flag = 1)),
+  (Flag = 0 ->
+  read_words_which_split_by_chrs2(T1, T2, Word1, CurList1, List);
+  read_words_which_split_by_chrs2(T1, [H2|T2], Word1, CurList1, List)).
+read_words_which_split_by_chrs2(S1, S2, List) :- read_words_which_split_by_chrs2(S1, S2, [], [], List).
+
+task21 :-
+  write("Str1 -> "),
+  read_str_nofix(S1),
+  write("Str2 -> "),
+  read_str_nofix(S2),
+  read_words_which_split_by_chrs2(S1, S2, List),
+  write_list_str(List).
+
+% Задание 22
+% выводим первый, последний и средний (если он есть) символы
+task22 :-
+  write("Str -> "),
+  read_str_nofix(S),
+  count_els(S, Count),
+  ((0 is Count mod 2) ->
+  (Flag = 0);
+  (MidN is (1 + Count) / 2,
+  ls_el_at_num(S, MidN, ElMid),
+  Flag = 1)),
+  ls_el_at_num(S, 1, Left),
+  ls_el_at_num(S, Count, Right),
+  (Flag = 1 ->
+  NewS = [Left, Right, ElMid];
+  NewS = [Left, Right]),
+  write("New Str => ["),
+  write_str(NewS),
+  write("]").

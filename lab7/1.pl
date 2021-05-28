@@ -18,28 +18,28 @@ write_str([H|Tail]):-
 % читаем строку нефиксированной длины (пока не встретим enter)
 read_str_nofix(A) :-
   get0(X),
-  r_str_nofix(X, A, []).
-r_str_nofix(10, A, A) :- !.
-r_str_nofix(X, A, B) :-
+  r_str_not_fixx(X, A, []).
+r_str_not_fixx(10, A, A) :- !.
+r_str_not_fixx(X, A, B) :-
   append(B, [X], B1),
   get0(X1),
-  r_str_nofix(X1, A, B1).
+  r_str_not_fixx(X1, A, B1).
 
 % количество элементов в списке
-count_els([], Count, Count) :- !.
-count_els([_|T], CurCount, Count) :-
+count_elements([], Count, Count) :- !.
+count_elements([_|T], CurCount, Count) :-
   CurCount1 is CurCount + 1,
-  count_els(T, CurCount1, Count).
-count_els(List, Count) :- count_els(List, 0, Count).
+  count_elements(T, CurCount1, Count).
+count_elements(List, Count) :- count_elements(List, 0, Count).
 
 % количество символов в строке
-count_chrs([], Count, Count) :- !.
-count_chrs([H|T], CurCount, Count) :-
+count_ch([], Count, Count) :- !.
+count_ch([H|T], CurCount, Count) :-
   (H = 32 ->
   CurCount1 is CurCount;
   CurCount1 is CurCount + 1),
-  count_chrs(T, CurCount1, Count).
-count_chrs(List, Count) :- count_chrs(List, 0, Count).
+  count_ch(T, CurCount1, Count).
+count_ch(List, Count) :- count_ch(List, 0, Count).
 
 % Задание 1
 task1 :-
@@ -53,38 +53,38 @@ task1 :-
   write_str(S),
   write("]"), nl,
   write("Elements => "),
-  count_els(S, Count),
+  count_elements(S, Count),
   write(Count).
 
 % Задание 2
 % получаем строку без первых пробелов
-list_nofirstspaces([], []) :- !.
-list_nofirstspaces([H|T], [H|T]) :- H \= 32, !.
-list_nofirstspaces([_|T], NewList) :- list_nofirstspaces(T, NewList).
+list_noprobel([], []) :- !.
+list_noprobel([H|T], [H|T]) :- H \= 32, !.
+list_noprobel([_|T], NewList) :- list_noprobel(T, NewList).
 
 % получаем слово до первого пробела (работает, если в начале нет пробелов)
-firstword([], Word, Word) :- !.
-firstword([H|_], Word, Word) :- H = 32, !.
-firstword([H|T], CurWord, NewWord) :-
+f_word([], Word, Word) :- !.
+f_word([H|_], Word, Word) :- H = 32, !.
+f_word([H|T], CurWord, NewWord) :-
   append(CurWord, [H], CurWord1),
-  firstword(T, CurWord1, NewWord).
-firstword(List, Word) :- firstword(List, [], Word).
+  f_word(T, CurWord1, NewWord).
+f_word(List, Word) :- f_word(List, [], Word).
 
 % считаем количество слов
 % убираем первые пробелы
 % если новый список не пустой, убираем слово, считаем + 1
 % иначе слов не осталось, ничего не считаем
-% кидаем новый ListNoFirstWord или с (пробелами + словами), или пустой
+% кидаем новый ListNof_word или с (пробелами + словами), или пустой
 count_words([], Count, Count) :- !.
 count_words(List, CurCount, Count) :-
-  list_nofirstspaces(List, ListNoFirstSpaces),
+  list_noprobel(List, ListNoFirstSpaces),
   (ListNoFirstSpaces \= [] ->
-  (firstword(ListNoFirstSpaces, FirstWord),
-  append(FirstWord, ListNoFirstWord, ListNoFirstSpaces),
+  (f_word(ListNoFirstSpaces, f_word),
+  append(f_word, ListNof_word, ListNoFirstSpaces),
   CurCount1 is CurCount + 1);
-  (ListNoFirstWord = [],
+  (ListNof_word = [],
   CurCount1 is CurCount)),
-  count_words(ListNoFirstWord, CurCount1, Count).
+  count_words(ListNof_word, CurCount1, Count).
 count_words(List, Count) :- count_words(List, 0, Count).
 
 task2 :-
@@ -96,25 +96,25 @@ task2 :-
 
 % Задание 3
 % получаем первое слово несмотря на пробелы
-firstword_nfs(List, Word) :-
-  list_nofirstspaces(List, ListNFS),
-  firstword(ListNFS, Word).
+f_word_nfs(List, Word) :-
+  list_noprobel(List, ListNFS),
+  f_word(ListNFS, Word).
 
 % получаем список слов
 list_of_words(List, LW, LW) :-
-  list_nofirstspaces(List, ListNFS),
+  list_noprobel(List, ListNFS),
   ListNFS = [], !.
 list_of_words(Str, CurLW, LW) :-
-  list_nofirstspaces(Str, StrNFS),
-  firstword(StrNFS, Word),
+  list_noprobel(Str, StrNFS),
+  f_word(StrNFS, Word),
   append(Word, StrNoWord, StrNFS),
   append(CurLW, [Word], CurLW1),
   list_of_words(StrNoWord, CurLW1, LW).
 list_of_words(Str, LW) :- list_of_words(Str, [], LW).
 
 % одинаковые ли списки
-lists_equals([], []) :- !.
-lists_equals([H|T1], [H|T2]) :- lists_equals(T1, T2).
+lists_equals_l([], []) :- !.
+lists_equals_l([H|T1], [H|T2]) :- lists_equals_l(T1, T2).
 
 % число раз, которое повторяется заданный элемент в списке
 count_equals([], _, Count, Count) :- !.
@@ -126,29 +126,29 @@ count_equals([H|T], El, CurCount, Count) :-
 count_equals(List, El, Count) :- count_equals(List, El, 0, Count).
 
 % слово, которое встречается чаще всего
-regular_word([], _, Word, Word) :- !.
-regular_word([H|T], Count, CurWord, Word) :-
+chastoe_word([], _, Word, Word) :- !.
+chastoe_word([H|T], Count, CurWord, Word) :-
   count_equals([H|T], H, Count1),
   (Count1 > Count ->
   (CurWord1 = H,
   Count2 = Count1);
   (CurWord1 = CurWord,
   Count2 = Count)),
-  regular_word(T, Count2, CurWord1, Word).
-regular_word(List, Word) :- regular_word(List, 0, [], Word).
+  chastoe_word(T, Count2, CurWord1, Word).
+chastoe_word(List, Word) :- chastoe_word(List, 0, [], Word).
 
 task3 :-
   write("Str -> "),
   read_str_nofix(S),
   list_of_words(S, LW),
-  regular_word(LW, Word),
+  chastoe_word(LW, Word),
   write("Regular word => ["),
   write_str(Word),
   write("]").
 
 % Задание 4
 % получаем список из последних трёх элементов
-list_with3els(List, List) :- count_els(List, 3), !.
+list_with3els(List, List) :- count_elements(List, 3), !.
 list_with3els([_|T], NewList) :- list_with3els(T, NewList).
 
 % список из одного символа заданное количество раз
@@ -162,7 +162,7 @@ list_with1el(El, N, List) :- list_with1el(El, N, [], List).
 task4 :-
   write("Str -> "),
   read_str_nofix(S),
-  count_els(S, Count),
+  count_elements(S, Count),
   (Count > 5 ->
   ([H1|[H2|[H3|T]]] = S,
   list_with3els(T, T3),
@@ -208,13 +208,13 @@ ls_with_nums([H|T], El, CurNum, Count, CurList, NewList) :-
   append(CurList, [], CurList1)),
   ls_with_nums(T, El, CurNum1, Count, CurList1, NewList).
 ls_with_nums(List, El, NewList) :-
-  count_els(List, Count),
+  count_elements(List, Count),
   ls_with_nums(List, El, 0, Count, [], NewList).
 
 task5 :-
   write("Str -> "),
   read_str_nofix(S),
-  count_els(S, Count),
+  count_elements(S, Count),
   ls_el_at_num(S, Count, El),
   ls_with_nums(S, El, Nums),
   write("El at "),
@@ -234,7 +234,7 @@ list_mod3els(List, Num, Count, CurList, NewList) :-
   append(CurList, [El], CurList1),
   list_mod3els(List, Num1, Count, CurList1, NewList).
 list_mod3els(List, NewList) :-
-  count_els(List, Count),
+  count_elements(List, Count),
   list_mod3els(List, 3, Count, [], NewList).
 
 task6 :-
@@ -256,13 +256,13 @@ count_pm([H|T], CurCount, Count) :-
 count_pm(List, Count) :- count_pm(List, 0, Count).
 
 % считаем количество элементов, после которых идёт 0
-count_afterthat0([_], Count, Count) :- !.
-count_afterthat0([_|[H2|T]], CurCount, Count) :-
+count_posle0([_], Count, Count) :- !.
+count_posle0([_|[H2|T]], CurCount, Count) :-
   (H2 = 48 ->
   CurCount1 is CurCount + 1;
   CurCount1 is CurCount),
-  count_afterthat0([H2|T], CurCount1, Count).
-count_afterthat0(List, Count) :- count_afterthat0(List, 0, Count).
+  count_posle0([H2|T], CurCount1, Count).
+count_posle0(List, Count) :- count_posle0(List, 0, Count).
 
 task7 :-
   write("Str -> "),
@@ -270,7 +270,7 @@ task7 :-
   count_pm(S, CountPM),
   write("Count [+] and [-] => "),
   write(CountPM), nl,
-  count_afterthat0(S, Count0),
+  count_posle0(S, Count0),
   write("Count els, after which [0] => "),
   write(Count0).
 
@@ -314,8 +314,8 @@ task9 :-
   read_str_nofix(S1),
   write("Str2 -> "),
   read_str_nofix(S2),
-  count_els(S1, Count1),
-  count_els(S2, Count2),
+  count_elements(S1, Count1),
+  count_elements(S2, Count2),
   (
     Count1 > Count2 ->
     (
@@ -334,37 +334,47 @@ task9 :-
 
 % Задание 10
 % получить список до номера (вместе с номером)
-get_ls_before(_, Num, Num, List, List) :- !.
-get_ls_before([H|T], CurNum, Num, CurList, NewList) :-
+get_before_numbers(_, Num, Num, List, List) :- !.
+get_before_numbers([H|T], CurNum, Num, CurList, NewList) :-
   append(CurList, [H], CurList1),
   CurNum1 is CurNum + 1,
-  get_ls_before(T, CurNum1, Num, CurList1, NewList).
-get_ls_before(List, Num, NewList) :- get_ls_before(List, 0, Num, [], NewList).
+  get_before_numbers(T, CurNum1, Num, CurList1, NewList).
+get_before_numbers(List, Num, NewList) :- get_before_numbers(List, 0, Num, [], NewList).
 
 % получить список после номера (вместе с номером)
 get_ls_after(List, Num, ListAfter) :-
   Num1 is Num - 1,
-  get_ls_before(List, Num1, ListBefore),
+  get_before_numbers(List, Num1, ListBefore),
   append(ListBefore, ListAfter, List).
 
 % получить список между номерами (без них)
 get_ls_between(List, Num1, Num2, ListBetween) :-
-  get_ls_before(List, Num1, ListBefore),
+  get_before_numbers(List, Num1, ListBefore),
   append(ListBefore, ListAfter, List),
   Num22 is Num2 - Num1 - 1,
-  get_ls_before(ListAfter, Num22, ListBetween).
+  get_before_numbers(ListAfter, Num22, ListBetween).
 
 % меняем все 'abc' на 'www'
-rpc_abc_to_www([H1, H2], CurList, List) :- append(CurList, [H1, H2], List), !.
-rpc_abc_to_www([H1], CurList, List) :- append(CurList, [H1], List), !.
-rpc_abc_to_www([], List, List) :- !.
-rpc_abc_to_www([H1|[H2|[H3|T]]], CurList, List) :-
+abc_to_www([H1, H2], CurList, List) :- append(CurList, [H1, H2], List), !.
+abc_to_www([H1], CurList, List) :- append(CurList, [H1], List), !.
+abc_to_www([], List, List) :- !.
+abc_to_www([H1|[H2|[H3|T]]], CurList, List) :-
   ((H1 = 97, H2 = 98, H3 = 99) ->
   (append(CurList, [119, 119, 119], CurList1),
-  rpc_abc_to_www(T, CurList1, List));
+  abc_to_www(T, CurList1, List));
   (append(CurList, [H1], CurList1),
-  rpc_abc_to_www([H2|[H3|T]], CurList1, List))).
-rpc_abc_to_www(List, NewList) :- rpc_abc_to_www(List, [], NewList).
+  abc_to_www([H2|[H3|T]], CurList1, List))).
+abc_to_www(List, NewList) :- abc_to_www(List, [], NewList).
+task10 :-
+  write("Str -> "),
+  read_str_nofix(S),
+  [H1|[H2|[H3|_]]] = S,
+  ((H1 = 97, H2 = 98, H3 = 99) ->
+  abc_to_www(S, NewS);
+  append(S, [122, 122, 122], NewS)),
+  write("New Str => ["),
+  write_str(NewS),
+  write("]").
 
 % Задание 11
 % добиваем строку заданным символом до заданной длины
@@ -377,24 +387,24 @@ list_rsz(El, CurN, N, CurList, List) :-
 task11 :-
   write("Str -> "),
   read_str_nofix(S),
-  count_els(S, Count),
+  count_elements(S, Count),
   (Count > 10 ->
-  get_ls_before(S, 6, NewS);
+  get_before_numbers(S, 6, NewS);
   list_rsz(111, Count, 12, S, NewS)),
   write("New Str => ["),
   write_str(NewS),
   write("]").
 % Задание 12
 % получаем список из слов из 3 символов
-list_words3chrs([_, _], List, List) :- !.
-list_words3chrs([_], List, List) :- !.
-list_words3chrs([], List, List) :- !.
-list_words3chrs(Str, CurListWords, ListWords) :-
-  get_ls_before(Str, 3, BeforeStr),
+list_words3simbol([_, _], List, List) :- !.
+list_words3simbol([_], List, List) :- !.
+list_words3simbol([], List, List) :- !.
+list_words3simbol(Str, CurListWords, ListWords) :-
+  get_before_numbers(Str, 3, BeforeStr),
   append(BeforeStr, AfterStr, Str),
   append(CurListWords, [BeforeStr], CurListWords1),
-  list_words3chrs(AfterStr, CurListWords1, ListWords).
-list_words3chrs(Str, ListWords) :- list_words3chrs(Str, [], ListWords).
+  list_words3simbol(AfterStr, CurListWords1, ListWords).
+list_words3simbol(Str, ListWords) :- list_words3simbol(Str, [], ListWords).
 
 % максимум из трёх элементов списка
 max_of_ls([H1, H2, H3], H1) :- H1 >= H2, H1 >= H3, !.
@@ -435,7 +445,7 @@ task12 :-
   write("Str -> "),
   read_str_nofix(S), nl,
   write("Original => "), nl,
-  list_words3chrs(S, Words),
+  list_words3simbol(S, Words),
   write_list_str(Words), nl,
   write("Modified => "), nl,
   rpc_mid_el_to_anr(Words, WordsRPC),
@@ -619,9 +629,9 @@ read_words_which_split_by_chrs1([H1|T1], [H2|T2], Word, CurList, List) :-
 read_words_which_split_by_chrs1(S1, S2, List) :- read_words_which_split_by_chrs1(S1, S2, [], [], List).
 
 % вторая реализация (с чтением пустого слова между разделителями)
-read_words_which_split_by_chrs2([], _, Word, CurList, List) :- append(CurList, [Word], List), !.
-read_words_which_split_by_chrs2(SubStr, [], _, CurList, List) :- append(CurList, [SubStr], List), !.
-read_words_which_split_by_chrs2([H1|T1], [H2|T2], Word, CurList, List) :-
+read_splitwords_which([], _, Word, CurList, List) :- append(CurList, [Word], List), !.
+read_splitwords_which(SubStr, [], _, CurList, List) :- append(CurList, [SubStr], List), !.
+read_splitwords_which([H1|T1], [H2|T2], Word, CurList, List) :-
   (H1 = H2 ->
   (append(CurList, [Word], CurList1),
   Flag = 0, Word1 = []);
@@ -629,16 +639,16 @@ read_words_which_split_by_chrs2([H1|T1], [H2|T2], Word, CurList, List) :-
   CurList1 = CurList,
   Flag = 1)),
   (Flag = 0 ->
-  read_words_which_split_by_chrs2(T1, T2, Word1, CurList1, List);
-  read_words_which_split_by_chrs2(T1, [H2|T2], Word1, CurList1, List)).
-read_words_which_split_by_chrs2(S1, S2, List) :- read_words_which_split_by_chrs2(S1, S2, [], [], List).
+  read_splitwords_which(T1, T2, Word1, CurList1, List);
+  read_splitwords_which(T1, [H2|T2], Word1, CurList1, List)).
+read_splitwords_which(S1, S2, List) :- read_splitwords_which(S1, S2, [], [], List).
 
 task21 :-
   write("Str1 -> "),
   read_str_nofix(S1),
   write("Str2 -> "),
   read_str_nofix(S2),
-  read_words_which_split_by_chrs2(S1, S2, List),
+  read_splitwords_which(S1, S2, List),
   write_list_str(List).
 
 % Задание 22
@@ -646,7 +656,7 @@ task21 :-
 task22 :-
   write("Str -> "),
   read_str_nofix(S),
-  count_els(S, Count),
+  count_elements(S, Count),
   ((0 is Count mod 2) ->
   (Flag = 0);
   (MidN is (1 + Count) / 2,
